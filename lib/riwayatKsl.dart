@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
 import 'detailKsl.dart';
+import 'clipper.dart';
 
 class RiwayatKonselingPage extends StatelessWidget {
   const RiwayatKonselingPage({Key? key}) : super(key: key);
@@ -11,40 +12,31 @@ class RiwayatKonselingPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // Header Merah
-          Stack(
-            children: [
-              Container(
-                height: 100,
-                decoration: const BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
+          ClipPath(
+            clipper: MyClipper(),
+            child: Container(
+              color: Colors.red,
+              height: 120,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
-                ),
-              ),
-              Positioned(
-                top: 40,
-                left: 10,
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.black),
-                      onPressed: () => Navigator.pop(context),
+                  SizedBox(width: 10),
+                  Text(
+                    "Riwayat Konseling",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const Text(
-                      "Riwayat Konseling",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
           const SizedBox(height: 20),
           Expanded(
