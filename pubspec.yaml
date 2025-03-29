@@ -75,7 +75,19 @@ flutter:
     - assets/icon3.png
     - assets/icon2.png
     - assets/alur.png
+    - assets/Emoji_not_selected_dissatisfied.png
+    - assets/Emoji_not_selected_very_dissatisfied.png
+    - assets/Emoji_not_selected_neutral.png
+    - assets/Emoji_not_selected_satisfied.png
+    - assets/Emoji_not_selected_very_satisfied.png
 
+    - assets/Emoji_selected_dissatisfied.png
+    - assets/Emoji_selected_neutral.png
+    - assets/Emoji_selected_satisfied.png
+    - assets/Emoji_selected_very_dissatisfied.png
+    - assets/Emoji_selected_very_satisfied.png
+
+    - assets/iconorang1.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
