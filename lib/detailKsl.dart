@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'clipper.dart';
 
 class DetailKonselingPage extends StatelessWidget {
   final String date;
@@ -18,40 +19,32 @@ class DetailKonselingPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // Header Merah
-          Stack(
-            children: [
-              Container(
-                height: 100,
-                decoration: const BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
+          // Header Merah dengan ClipPath
+          ClipPath(
+            clipper: MyClipper(),
+            child: Container(
+              color: Colors.red,
+              height: 120,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
-                ),
-              ),
-              Positioned(
-                top: 40,
-                left: 10,
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.black),
-                      onPressed: () => Navigator.pop(context),
+                  SizedBox(width: 10),
+                  Text(
+                    "Detail Konseling",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const Text(
-                      "Detail Konseling",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
           const SizedBox(height: 20),
 
