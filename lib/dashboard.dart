@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
+import 'laporan.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -91,14 +92,19 @@ class _DashboardPageState extends State<DashboardPage> {
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 4,
                 children: [
-                  _buildFeatureIcon("Buat Laporan", "assets/report.png"),
-                  _buildFeatureIcon("Riwayat Laporan", "assets/history.png"),
-                  _buildFeatureIcon("Jadwal Konseling", "assets/schedule.png"),
-                  _buildFeatureIcon("Riwayat Konseling", "assets/counseling.png"),
-                  _buildFeatureIcon("Emosiku", "assets/emotion.png"),
-                  _buildFeatureIcon("Catatan Harian", "assets/journal.png"),
-                  _buildFeatureIcon("Suara Telutizen", "assets/forum.png"),
-                  _buildFeatureIcon("FAQ", "assets/faq.png"),
+                  _buildFeatureIcon("Buat Laporan", "assets/report.png", () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LaporanPage()),
+                    );
+                  }),
+                  _buildFeatureIcon("Riwayat Laporan", "assets/history.png", null),
+                  _buildFeatureIcon("Jadwal Konseling", "assets/schedule.png", null),
+                  _buildFeatureIcon("Riwayat Konseling", "assets/counseling.png", null),
+                  _buildFeatureIcon("Emosiku", "assets/emotion.png", null),
+                  _buildFeatureIcon("Catatan Harian", "assets/journal.png", null),
+                  _buildFeatureIcon("Suara Telutizen", "assets/forum.png", null),
+                  _buildFeatureIcon("FAQ", "assets/faq.png", null),
                 ],
               ),
             ),
@@ -131,27 +137,30 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildFeatureIcon(String label, String assetPath) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 4,
-                offset: Offset(2, 2),
-              ),
-            ],
+  Widget _buildFeatureIcon(String label, String assetPath, VoidCallback? onTap) {
+    return GestureDetector(
+      onTap: onTap, // Menjalankan fungsi ketika ikon ditekan
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 4,
+                  offset: Offset(2, 2),
+                ),
+              ],
+            ),
+            child: Image.asset(assetPath, width: 40, height: 40),
           ),
-          child: Image.asset(assetPath, width: 40, height: 40),
-        ),
-        const SizedBox(height: 5),
-        Text(label, textAlign: TextAlign.center, style: const TextStyle(fontSize: 10)),
-      ],
+          const SizedBox(height: 5),
+          Text(label, textAlign: TextAlign.center, style: const TextStyle(fontSize: 10)),
+        ],
+      ),
     );
   }
 
