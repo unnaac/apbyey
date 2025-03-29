@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
 import 'laporan.dart';
+import 'riwayatlaporan.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -98,7 +99,12 @@ class _DashboardPageState extends State<DashboardPage> {
                       MaterialPageRoute(builder: (context) => LaporanPage()),
                     );
                   }),
-                  _buildFeatureIcon("Riwayat Laporan", "assets/history.png", null),
+                  _buildFeatureIcon("Riwayat Laporan", "assets/history.png", () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RiwayatLaporanPage()),
+                    );
+                  }),
                   _buildFeatureIcon("Jadwal Konseling", "assets/schedule.png", null),
                   _buildFeatureIcon("Riwayat Konseling", "assets/counseling.png", null),
                   _buildFeatureIcon("Emosiku", "assets/emotion.png", null),

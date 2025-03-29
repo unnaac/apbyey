@@ -49,7 +49,8 @@ dev_dependencies:
   file_picker: ^6.1.1
   image_picker: ^1.0.7
   table_calendar: ^3.0.9
-
+  flutter_time_picker_spinner: ^2.0.0 
+  calendar_date_picker2: ^2.0.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -78,7 +79,19 @@ flutter:
     - assets/icon3.png
     - assets/icon2.png
     - assets/alur.png
+    - assets/Emoji_not_selected_dissatisfied.png
+    - assets/Emoji_not_selected_very_dissatisfied.png
+    - assets/Emoji_not_selected_neutral.png
+    - assets/Emoji_not_selected_satisfied.png
+    - assets/Emoji_not_selected_very_satisfied.png
 
+    - assets/Emoji_selected_dissatisfied.png
+    - assets/Emoji_selected_neutral.png
+    - assets/Emoji_selected_satisfied.png
+    - assets/Emoji_selected_very_dissatisfied.png
+    - assets/Emoji_selected_very_satisfied.png
+
+    - assets/iconorang1.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

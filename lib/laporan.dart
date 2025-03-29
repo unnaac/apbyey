@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class LaporanPage extends StatefulWidget {
   @override
@@ -11,10 +9,9 @@ class LaporanPage extends StatefulWidget {
 class _LaporanPageState extends State<LaporanPage> {
   String? selectedAnonim;
   String? selectedStatus;
-  DateTime selectedDate = DateTime.now();
+  DateTime? selectedDate;
   TextEditingController deskripsiController = TextEditingController();
   TextEditingController lokasiController = TextEditingController();
-  GoogleMapController? mapController;
   String? uploadedFile;
 
   @override
@@ -44,61 +41,10 @@ class _LaporanPageState extends State<LaporanPage> {
               SizedBox(height: 20),
               Text("Pilih Tanggal dan Waktu", style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5)],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    TableCalendar(
-                      firstDay: DateTime.utc(2000, 1, 1),
-                      lastDay: DateTime.utc(2100, 12, 31),
-                      focusedDay: selectedDate,
-                      selectedDayPredicate: (day) => isSameDay(selectedDate, day),
-                      onDaySelected: (selectedDay, focusedDay) {
-                        setState(() => selectedDate = selectedDay);
-                      },
-                      calendarStyle: CalendarStyle(
-                        todayDecoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                        selectedDecoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      headerStyle: HeaderStyle(
-                        formatButtonVisible: false,
-                        titleCentered: true,
-                        leftChevronIcon: Icon(Icons.chevron_left, color: Colors.red),
-                        rightChevronIcon: Icon(Icons.chevron_right, color: Colors.red),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text("Pilih Tanggal", style: TextStyle(color: Colors.white)),
-                      style: TextButton.styleFrom(backgroundColor: Colors.red),
-                    ),
-                  ],
-                ),
-              ),
+              _buildDatePicker(),
               SizedBox(height: 20),
               _buildTextField("Deskripsi", deskripsiController, maxLines: 3, borderColor: Colors.red),
               _buildTextField("Lokasi", lokasiController, borderColor: Colors.red),
-              SizedBox(height: 10),
-              Container(
-                height: 200,
-                decoration: BoxDecoration(border: Border.all(color: Colors.red)),
-                child: GoogleMap(
-                  initialCameraPosition: CameraPosition(target: LatLng(-6.914744, 107.609810), zoom: 15),
-                  onMapCreated: (GoogleMapController controller) {
-                    mapController = controller;
-                  },
-                ),
-              ),
               SizedBox(height: 20),
               _buildFileUpload(),
               SizedBox(height: 20),
@@ -147,6 +93,50 @@ class _LaporanPageState extends State<LaporanPage> {
     );
   }
 
+  Widget _buildDatePicker() {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Text(
+              selectedDate != null ? "${selectedDate!.day} / ${selectedDate!.month} / ${selectedDate!.year}" : "Pilih Tanggal",
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ),
+        SizedBox(width: 10),
+        ElevatedButton(
+  onPressed: () async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null) {
+      setState(() => selectedDate = pickedDate);
+    }
+  },
+  child: Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Icon(Icons.calendar_today, color: Colors.white), 
+      SizedBox(width: 5),
+      Text("Pilih Tanggal"),
+    ],
+  ),
+  style: ElevatedButton.styleFrom(backgroundColor: Color(0xFFED1E28)),
+),
+
+      ],
+    );
+  }
+
   Widget _buildTextField(String label, TextEditingController controller, {int maxLines = 1, Color borderColor = Colors.grey}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,20 +160,8 @@ class _LaporanPageState extends State<LaporanPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ElevatedButton(
-          onPressed: () async {
-            FilePickerResult? result = await FilePicker.platform.pickFiles();
-            if (result != null) {
-              setState(() => uploadedFile = result.files.single.name);
-            }
-          },
-          child: Text("Upload Bukti"),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFFED1E28),
-            foregroundColor: Colors.white,
-          ),
-        ),
-        SizedBox(height: 10),
+        Text("Bukti", style: TextStyle(fontWeight: FontWeight.bold)),
+        SizedBox(height: 5),
         GestureDetector(
           onTap: () async {
             FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -199,10 +177,17 @@ class _LaporanPageState extends State<LaporanPage> {
               color: Colors.red.shade100,
             ),
             child: Center(
-              child: Text(
-                uploadedFile ?? "Kirim Bukti Kekerasan (Optional)",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.upload, color: Colors.red, size: 30),
+                  SizedBox(height: 5),
+                  Text(
+                    uploadedFile ?? "Kirim Bukti Kekerasan (Optional)",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
               ),
             ),
           ),
