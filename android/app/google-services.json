@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "285737156524",
+    "firebase_url": "https://ngetest-df385-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "ngetest-df385",
+    "storage_bucket": "ngetest-df385.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285737156524:android:6056c437a0dee8a84d8409",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPVuM2YqOaHY9BptnE2SaQUDRHkbQqOrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285737156524:android:0506af31c054eaf54d8409",
+        "android_client_info": {
+          "package_name": "com.example.tubes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPVuM2YqOaHY9BptnE2SaQUDRHkbQqOrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
