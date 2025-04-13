@@ -1,9 +1,10 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
-import 'clipper.dart';
+import 'package:telu/clipper.dart';
 
 class BookingScreen extends StatefulWidget {
+  const BookingScreen({super.key});
+
   @override
   State<BookingScreen> createState() => _BookingScreenState();
 }
@@ -19,7 +20,7 @@ class _BookingScreenState extends State<BookingScreen> {
 
   DateTime selectedDate = DateTime.now();
 
-  DateTime selectedTime = DateTime.now();
+  String? selectedSession;
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +191,7 @@ class _BookingScreenState extends State<BookingScreen> {
 
                   SizedBox(height: 20),
                   SizedBox(height: 10),
-                  Text('Pilih Tanggal dan Waktu'),
+                  Text('Pilih Tanggal'),
 
                   SizedBox(height: 8),
                   Container(
@@ -219,79 +220,55 @@ class _BookingScreenState extends State<BookingScreen> {
                       },
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment
-                            .spaceBetween, // Memberi jarak antar item
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.all(4), // Padding lebih kecil
-                          margin: EdgeInsets.only(
-                            right: 4,
-                          ), // Jarak antar elemen
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(
-                              6,
-                            ), // Radius lebih kecil
-                          ),
-                          child: TimePickerSpinner(
-                            is24HourMode: true,
-                            normalTextStyle: TextStyle(
-                              fontSize: 18, // Ukuran font lebih kecil
-                              color: Colors.grey,
-                            ),
-                            highlightedTextStyle: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            spacing: 18, // Spasi lebih kecil
-                            itemHeight: 18, // Tinggi item lebih kecil
-                            isForce2Digits: true,
-                            onTimeChange: (time) {
-                              setState(() {
-                                selectedTime = time;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          margin: EdgeInsets.only(
-                            left: 4,
-                          ), // Jarak antar elemen
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: TimePickerSpinner(
-                            is24HourMode: true,
-                            normalTextStyle: TextStyle(
-                              fontSize: 18, // Ukuran font lebih kecil
-                              color: Colors.grey,
-                            ),
-                            highlightedTextStyle: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            spacing: 18, // Spasi lebih kecil
-                            itemHeight: 18, // Tinggi item lebih kecil
-                            isForce2Digits: true,
-                            onTimeChange: (time) {
-                              setState(() {
-                                selectedTime = time;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  SizedBox(width: 10),
+                  Text('Pilih Sesi Konseling'),
 
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                     border: OutlineInputBorder(
+                      borderSide: BorderSide(width: 1.0, color: Colors.red),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 1.0, color: Colors.red),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 1.0, color: Colors.red),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                   ),
+                  value: selectedSession,
+                  validator: (value) {
+                     if (value == null || value.isEmpty) {
+                      return 'Pilih sesi waktu terlebih dahulu';
+                    }
+                     return null;
+                   },
+                  items: [
+                    DropdownMenuItem(
+                      value: "08.00 - 09.00",
+                      child: Text("08.00 - 09.00"),
+                    ),
+                    DropdownMenuItem(
+                      value: "10.00 - 11.00",
+                      child: Text("10.00 - 11.00"),
+                    ),
+                    DropdownMenuItem(
+                      value: "13.00 - 14.00",
+                      child: Text("13.00 - 14.00"),
+                    ),
+                    DropdownMenuItem(
+                      value: "15.00 - 16.00",
+                      child: Text("15.00 - 16.00"),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      selectedSession = value!;
+                    });
+                  },
+                ),
                   SizedBox(height: 20),
                   DropdownButtonFormField(
                     decoration: InputDecoration(
@@ -344,7 +321,7 @@ class _BookingScreenState extends State<BookingScreen> {
 
 class CustomButton extends StatelessWidget {
   final String label;
-  CustomButton({required this.label});
+  const CustomButton({super.key, required this.label});
 
   @override
   Widget build(BuildContext context) {
