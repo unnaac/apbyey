@@ -1,113 +1,86 @@
-<<<<<<< HEAD
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:firebase_core/firebase_core.dart';
-import 'widget_tree.dart';
+import 'styles/theme.dart';
+import 'catatan_harian_screen.dart';
+import 'chatbot_screen.dart';
+import 'emosiku_screen.dart';
+import 'notifikasi_screen.dart';
+import 'akun_screen.dart'; // Import the AkunScreen
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      title: 'Telusafe',
+      theme: AppTheme.lightTheme,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomeScreen(),
+        '/catatanHarian': (context) => const CatatanHarianScreen(),
+        '/chatbot': (context) => const ChatbotScreen(),
+        '/emosiku': (context) => const EmosikuScreen(),
+        '/notifikasi': (context) => const NotifikasiScreen(),
+        '/akun': (context) => const AkunScreen(),
+      },
     );
   }
 }
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const WidgetTree()),
-      );
-    });
-  }
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFED1E28),
+      appBar: AppBar(
+        title: const Text('Telusafe Home'),
+      ),
       body: Center(
-        child: Image.asset(
-          'assets/logo.png',
-          width: 200,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/catatanHarian');
+              },
+              child: const Text('Catatan Harian'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/chatbot');
+              },
+              child: const Text('Chatbot'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/emosiku');
+              },
+              child: const Text('Emosiku'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/notifikasi');
+              },
+              child: const Text('Notifikasi'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/akun'); // Navigate to AkunScreen
+              },
+              child: const Text('Go to Akun'),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-=======
-import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:firebase_core/firebase_core.dart';
-import 'widget_tree.dart';
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
-    );
-  }
-}
-
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const WidgetTree()),
-      );
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFED1E28),
-      body: Center(
-        child: Image.asset(
-          'assets/logo.png',
-          width: 200,
-        ),
-      ),
-    );
-  }
-}
->>>>>>> 88e04336830f6da6ca594b9a246b3b73d1e8dd6e
