@@ -1,84 +1,55 @@
 import 'package:flutter/material.dart';
-import 'styles/theme.dart';
-import 'catatan_harian_screen.dart';
-import 'chatbot_screen.dart';
-import 'emosiku_screen.dart';
-import 'notifikasi_screen.dart';
-import 'akun_screen.dart'; // Import the AkunScreen
+import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
+import 'widget_tree.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await initializeDateFormatting('id_ID', null);
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Telusafe',
-      theme: AppTheme.lightTheme,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const HomeScreen(),
-        '/catatanHarian': (context) => const CatatanHarianScreen(),
-        '/chatbot': (context) => const ChatbotScreen(),
-        '/emosiku': (context) => const EmosikuScreen(),
-        '/notifikasi': (context) => const NotifikasiScreen(),
-        '/akun': (context) => const AkunScreen(),
-      },
+      debugShowCheckedModeBanner: false,
+      home: const SplashScreen(),
     );
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(const Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const WidgetTree()),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Telusafe Home'),
-      ),
+      backgroundColor: const Color(0xFFED1E28),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/catatanHarian');
-              },
-              child: const Text('Catatan Harian'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/chatbot');
-              },
-              child: const Text('Chatbot'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/emosiku');
-              },
-              child: const Text('Emosiku'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/notifikasi');
-              },
-              child: const Text('Notifikasi'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/akun'); // Navigate to AkunScreen
-              },
-              child: const Text('Go to Akun'),
-            ),
-          ],
+        child: Image.asset(
+          'assets/logo.png',
+          width: 200,
         ),
       ),
     );

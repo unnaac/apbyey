@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart'; // Import intl package
+import 'emosikudb.dart';
 
 class EmosikuScreen extends StatefulWidget {
   const EmosikuScreen({Key? key}) : super(key: key);
@@ -11,17 +15,21 @@ class _EmosikuScreenState extends State<EmosikuScreen>
     with SingleTickerProviderStateMixin {
   Set<String> selectedFactors = {};
   String? selectedMood;
+  String? username;
   bool isScreenVisible = false;
   final TextEditingController _catatanController = TextEditingController();
   late AnimationController _animationController;
   late Animation<double> _shakeAnimation;
 
-  @override
+  // State untuk menyimpan data emosi hari ini
+  Map<String, dynamic>? _emosiHariIni;
+  bool _isLoading = true; // Tambahkan state loading
+
+  @override // Ini yang benar
   void initState() {
     super.initState();
     isScreenVisible = true;
-
-    // Initialize animation controller for shake effect
+    _fetchInitialData(); // Gabungkan fetch username dan data emosi
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -29,6 +37,52 @@ class _EmosikuScreenState extends State<EmosikuScreen>
     _shakeAnimation = Tween<double>(begin: 0, end: 10)
         .chain(CurveTween(curve: Curves.elasticIn))
         .animate(_animationController);
+  }
+
+  Future<void> _fetchInitialData() async {
+    await _fetchUsername();
+    await _loadEmosiHariIni();
+    setState(() {
+      _isLoading = false; // Selesai memuat
+      if (_emosiHariIni != null) {
+        selectedMood = _emosiHariIni!['mood'];
+        _catatanController.text = _emosiHariIni!['catatan'] ?? '';
+        selectedFactors =
+            (_emosiHariIni!['faktor'] as String?)?.split(', ').toSet() ?? {};
+      }
+    });
+  }
+
+  Future<void> _fetchUsername() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final snapshot =
+          await FirebaseDatabase.instance.ref('users/${user.uid}').get();
+      if (snapshot.exists) {
+        setState(() {
+          username = snapshot.child('username').value?.toString();
+        });
+      }
+    }
+  }
+
+  Future<void> _loadEmosiHariIni() async {
+    final db = EmosiDB();
+    final hariIni = DateTime.now();
+    final formattedHariIni = DateFormat('dd-MM-yyyy').format(hariIni);
+
+    try {
+      final semuaDataEmosi = await db.getEmosiData();
+      _emosiHariIni = semuaDataEmosi.firstWhere(
+        (data) => (data['timestamp'] as String).startsWith(formattedHariIni),
+        orElse: () =>
+            <String, dynamic>{}, // Kembalikan Map kosong jika tidak ada data
+      );
+      print('Data emosi hari ini: $_emosiHariIni');
+    } catch (e) {
+      print('Gagal memuat data emosi hari ini: $e');
+      _emosiHariIni = null; // Tetap null saat terjadi error
+    }
   }
 
   @override
@@ -69,24 +123,29 @@ class _EmosikuScreenState extends State<EmosikuScreen>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: AnimatedOpacity(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        top: false,
+        child: AnimatedOpacity(
           duration: const Duration(milliseconds: 500),
           opacity: isScreenVisible ? 1.0 : 0.0,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                _buildHeader(),
-                _buildDateAndImageContainer(),
-                _buildMoodSelection(),
-                _buildFactorSelection(),
-                _buildTextInput(),
-                _buildSaveButton(),
-              ],
-            ),
-          ),
+          child: _isLoading
+              ? const Center(
+                  child:
+                      CircularProgressIndicator()) // Tampilkan loading indicator
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _buildHeader(),
+                      _buildDateAndImageContainer(),
+                      _buildMoodSelection(),
+                      _buildFactorSelection(),
+                      _buildTextInput(),
+                      _buildSaveButton(),
+                    ],
+                  ),
+                ),
         ),
       ),
     );
@@ -133,7 +192,7 @@ class _EmosikuScreenState extends State<EmosikuScreen>
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withAlpha(77), // Updated from withOpacity(0.3)
+              color: Colors.grey.withAlpha(77),
               spreadRadius: 2,
               blurRadius: 5,
             ),
@@ -161,6 +220,16 @@ class _EmosikuScreenState extends State<EmosikuScreen>
                       fontSize: 16,
                     ),
                   ),
+                  if (username != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      'Halo, $username!',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -249,13 +318,13 @@ class _EmosikuScreenState extends State<EmosikuScreen>
             'Apa yang memengaruhi emosimu?',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 14, // Match font size to the second image
+              fontSize: 14,
             ),
           ),
-          const SizedBox(height: 8), // Minimal spacing between text and chips
+          const SizedBox(height: 8),
           Wrap(
-            spacing: 6.0, // Small horizontal gap between chips
-            runSpacing: 6.0, // Small vertical gap between rows of chips
+            spacing: 6.0,
+            runSpacing: 6.0,
             children: [
               _buildFactorChip('Keluarga'),
               _buildFactorChip('Kuliah'),
@@ -278,7 +347,7 @@ class _EmosikuScreenState extends State<EmosikuScreen>
       label: Text(
         factor,
         style: const TextStyle(
-          fontSize: 12, // Match font size to the second image
+          fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -315,7 +384,7 @@ class _EmosikuScreenState extends State<EmosikuScreen>
           const Text('Tulis catatan di sini:',
               style: TextStyle(fontWeight: FontWeight.bold)),
           TextField(
-            controller: _catatanController, // Kontrol input untuk catatan
+            controller: _catatanController,
             maxLines: 4,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
@@ -327,21 +396,26 @@ class _EmosikuScreenState extends State<EmosikuScreen>
     );
   }
 
-  void _saveMoodAndNote() {
+  void _saveMoodAndNote() async {
     if (selectedMood == null || _catatanController.text.isEmpty) {
-      _animationController.forward(from: 0); // Trigger shake animation
+      _animationController.forward(from: 0);
       return;
     }
 
-    final result = {
-      'mood': selectedMood,
-      'catatan': _catatanController.text,
-      'factors': selectedFactors.toList(),
-      'date': DateTime.now()
-          .toIso8601String(), // Use ISO8601 format for consistency
-    };
-
-    Navigator.of(context).pop(result); // Pass the result back
+    try {
+      final db = EmosiDB();
+      await db.saveEmosi(
+        mood: selectedMood!,
+        catatan: _catatanController.text.trim(),
+        faktor: selectedFactors.join(', '),
+        tanggal: DateTime.now(),
+      );
+      Navigator.of(context).pop();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal menyimpan: $e')),
+      );
+    }
   }
 
   // Save Button

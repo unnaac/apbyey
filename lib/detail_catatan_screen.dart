@@ -67,7 +67,8 @@ class DetailCatatanScreen extends StatelessWidget {
               Wrap(
                 spacing: 8.0,
                 runSpacing: 4.0,
-                children: (record['factors'] as List<String>)
+                children: (record['factors'] as List)
+                    .map((e) => e.toString())
                     .map((factor) => Chip(
                           label: Text(factor),
                           backgroundColor: Colors.red[100],

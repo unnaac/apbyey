@@ -1,0 +1,2 @@
+C:/Users/Niym/Documents/Fax/tubes/android/app/.cxx/Debug/4am58354/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Niym/Documents/Fax/tubes/android/app/.cxx/Debug/4am58354/x86_64/CMakeFiles/rebuild_cache.dir

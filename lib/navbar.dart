@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'package:flutter/material.dart';
 
 class CustomNavBar extends StatelessWidget {
@@ -16,105 +15,80 @@ class CustomNavBar extends StatelessWidget {
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
       notchMargin: 8.0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(
-            icon: const ImageIcon(
-              AssetImage('assets/icon2.png'),
-              size: 60,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: SizedBox(
+        height: 70,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(
+              icon: Icons.home_outlined,
+              activeIcon: Icons.home,
+              index: 0,
+              label: 'Home',
             ),
-            color:
-            selectedIndex == 0 ? Colors.red : Colors.black, // Warna aktif
-            onPressed: () => onItemTapped(0),
-          ),
-          IconButton(
-            icon: const ImageIcon(
-              AssetImage('assets/icon3.png'),
-              size: 60,
+            _buildNavItem(
+              icon: Icons.timeline,
+              activeIcon: Icons.timeline,
+              index: 1,
+              label: 'Timeline',
             ),
-            color: selectedIndex == 1 ? Colors.red : Colors.black,
-            onPressed: () => onItemTapped(1),
-          ),
-          const SizedBox(width: 40), // Spasi untuk FAB
-          IconButton(
-            icon: const ImageIcon(
-              AssetImage('assets/icon4.png'),
-              size: 60,
+            const SizedBox(width: 48), // Space for FAB
+            _buildNavItem(
+              icon: Icons.notifications_outlined,
+              activeIcon: Icons.notifications,
+              index: 2,
+              label: 'Notifikasi',
             ),
-            color: selectedIndex == 2 ? Colors.red : Colors.black,
-            onPressed: () => onItemTapped(2),
-          ),
-          IconButton(
-            icon: const ImageIcon(
-              AssetImage('assets/icon5.png'),
-              size: 60,
+            _buildNavItem(
+              icon: Icons.person_outline,
+              activeIcon: Icons.person,
+              index: 3,
+              label: 'Profile',
             ),
-            color: selectedIndex == 3 ? Colors.red : Colors.black,
-            onPressed: () => onItemTapped(3),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
-=======
-import 'package:flutter/material.dart';
 
-class CustomNavBar extends StatelessWidget {
-  final Function(int) onItemTapped;
-  final int selectedIndex;
+  Widget _buildNavItem({
+    required IconData icon,
+    required IconData activeIcon,
+    required int index,
+    required String label,
+  }) {
+    final bool isSelected = selectedIndex == index;
+    final Color iconColor = isSelected ? Colors.red : Colors.grey.shade600;
 
-  const CustomNavBar({
-    Key? key,
-    required this.onItemTapped,
-    required this.selectedIndex,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      shape: const CircularNotchedRectangle(),
-      notchMargin: 8.0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(
-            icon: const ImageIcon(
-              AssetImage('assets/icon2.png'),
-              size: 60,
-            ),
-            color:
-            selectedIndex == 0 ? Colors.red : Colors.black, // Warna aktif
-            onPressed: () => onItemTapped(0),
+    return Expanded(
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: () => onItemTapped(index),
+          borderRadius: BorderRadius.circular(8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                isSelected ? activeIcon : icon,
+                size: 28,
+                color: iconColor,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: iconColor,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+            ],
           ),
-          IconButton(
-            icon: const ImageIcon(
-              AssetImage('assets/icon3.png'),
-              size: 60,
-            ),
-            color: selectedIndex == 1 ? Colors.red : Colors.black,
-            onPressed: () => onItemTapped(1),
-          ),
-          const SizedBox(width: 40), // Spasi untuk FAB
-          IconButton(
-            icon: const ImageIcon(
-              AssetImage('assets/icon4.png'),
-              size: 60,
-            ),
-            color: selectedIndex == 2 ? Colors.red : Colors.black,
-            onPressed: () => onItemTapped(2),
-          ),
-          IconButton(
-            icon: const ImageIcon(
-              AssetImage('assets/icon5.png'),
-              size: 60,
-            ),
-            color: selectedIndex == 3 ? Colors.red : Colors.black,
-            onPressed: () => onItemTapped(3),
-          ),
-        ],
+        ),
       ),
     );
   }
->>>>>>> 88e04336830f6da6ca594b9a246b3b73d1e8dd6e
 }
